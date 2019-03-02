@@ -26,7 +26,6 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -39,13 +38,9 @@ public class TestDoubleGearArmMovement extends LinearOpMode {
 
     /* Declare OpMode members. */
     MasterXHardware robot = new MasterXHardware();
-
-
     private ElapsedTime runtime  = new ElapsedTime();
     @Override
     public void runOpMode() {
-
-
         robot.init(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
@@ -56,11 +51,8 @@ public class TestDoubleGearArmMovement extends LinearOpMode {
 
         while (opModeIsActive())
         {
-
             robot.leftBackMotor.setPower(gamepad1.left_stick_y);
             robot.leftFrontMotor.setPower(-gamepad1.left_stick_y);
-
-
 
             telemetry.addData("FIRST: ", -gamepad1.left_stick_y);
             telemetry.addData("SECOND: ", -gamepad1.right_stick_y);
@@ -69,6 +61,4 @@ public class TestDoubleGearArmMovement extends LinearOpMode {
             sleep(40);
         }
     }
-
-
 }

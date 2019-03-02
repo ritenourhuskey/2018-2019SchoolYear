@@ -81,26 +81,17 @@ public class ProjectRoverRuckusMecanumDriveHardware
         MineralDepot = hwMap.get(DcMotor.class, "mineral");
         boneDispenser = hwMap.get(Servo.class, "b");
         KermmitMover = hwMap.get(Servo.class,"km");
-
-
-
-
-
 //        KermitExtender = hwMap.get(DcMotor.class, "ke");
-
 
         // Set all motors to zero power
         leftDriveBack.setPower(0);
         rightDriveBack.setPower(0);
-
         leftDriveFront.setPower(0);
         rightDriveFront.setPower(0);
         MineralDepot.setPower(0);
         LinearSlide.setPower(0);
         KermitCollector.setPower(0);
         LatchUp.setPower(0);
-
-
 //        KermitExtender.setPower(0);
 
         // Set all motors to run without encoders.
@@ -113,7 +104,5 @@ public class ProjectRoverRuckusMecanumDriveHardware
         KermitCollector.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         LatchUp.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         MineralDepot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-
     }
 }

@@ -84,41 +84,9 @@ public class NewAutoWithSampling extends LinearOpMode{
         robot.leftBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.rightFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.rightBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-/*
-            encoderDriveLeft(SUPERSONICSPEED, SUPERSONICSPEED, 2, 1);
-            pauseRobot(1);
-            encoderDriveForward(1,4,2);
-            pauseRobot(1);
-            encoderDriveTurnLeft(1, 9, 3);
-            pauseRobot(1);
-            encoderDriveForward(1, 15, 7.5);
-            pauseRobot(1);
-            encoderDriveForward(1,20,3);
-            encoderDriveForward(SUPERSONICSPEED,5,5);
-            pauseRobot(1);
-            encoderDriveTurnLeft(SUPERSONICSPEED,6,6);
-            pauseRobot(1);
-            encoderDriveForward(SUPERSONICSPEED,9,9);
-            pauseRobot(1);
-            encoderDriveTurnRight(SUPERSONICSPEED,4,4);
-            pauseRobot(1);
-            boneDown();
-            pauseRobot(1);
-            encoderDriveTurnRight(SUPERSONICSPEED,500,5);
-            pauseRobot(1);
-            encoderDriveLeft(SUPERSONICSPEED,SUPERSONICSPEED,2,2);
-            pauseRobot(1);
-            encoderDriveForward(SUPERSONICSPEED,500,8);
-            pauseRobot(1);
-            sleep(sleepTime);
-            boneDown();
-            sleep(sleepTime);
-            runtime.reset();
-*/
     }
 
     public void moveForward(double forwardSpeed, double time){
-        // DON'T CHANGE THIS CODE DAMIEN! IT WORKS!
         runtime.reset();
         while(opModeIsActive() && runtime.seconds()<time) {
             robot.leftFrontMotor.setPower(-forwardSpeed);
@@ -146,7 +114,6 @@ public class NewAutoWithSampling extends LinearOpMode{
         }
     }
     public void moveBackward(double backwardSpeed, double time) {
-        // DON'T CHANGE THIS CODE DAMIEN! IT WORKS!
         runtime.reset();
         while(opModeIsActive() && runtime.seconds() < time) {
             robot.leftFrontMotor.setPower(backwardSpeed);

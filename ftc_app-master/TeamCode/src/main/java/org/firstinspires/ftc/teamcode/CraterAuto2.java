@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode;
-
 import com.disnodeteam.dogecv.CameraViewDisplay;
 import com.disnodeteam.dogecv.DogeCV;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
@@ -9,9 +8,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="CraterAuto", group="PushBot")
+@Autonomous(name="Crater2", group="PushBot")
 @Disabled
-public class CraterSideAuto extends LinearOpMode{
+public class CraterAuto2 extends LinearOpMode{
+    // Work in progress
 
     /* Public OpMode members. */
     MasterXHardware robot = new MasterXHardware();
@@ -28,14 +28,13 @@ public class CraterSideAuto extends LinearOpMode{
     static final double     SUPERSONICSPEED      = 1.0;
     double sample_speed = 0.3;
 
-    double boneDispenser_up_position = .69;
-    double boneDispenser_down_position = 1;
-
-    double camera_position = 0.7;
-    double camera_down = 0.05;
+    double boneDispenser_up_position = 0.25;
+    double boneDispenser_down_position = 1.0;
 
     double latch_up_speed = 0.5;
     double latch_down_speed = 0.5;
+    double camera_up = .7;
+    double camera_down = .05;
 
     long sleepTime = 1000;
 
@@ -43,7 +42,7 @@ public class CraterSideAuto extends LinearOpMode{
     @Override
     public void runOpMode(){
         robot.init(hardwareMap);
-        // robot.boneDispenser.setPosition(boneDispenser_up_position);
+        robot.boneDispenser.setPosition(boneDispenser_up_position);
         detector = new GoldAlignDetector();
         detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance(), -1, false);
         detector.useDefaults();
@@ -59,11 +58,12 @@ public class CraterSideAuto extends LinearOpMode{
 
         detector.ratioScorer.weight = 5;
         detector.ratioScorer.perfectRatio = 1.0;
-        //  robot.phoneServo.setPosition(camera_position);// 1=vertical, 0=horizontal
 
 
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
+        robot.phoneServo.setPosition(camera_down);
+
         waitForStart();
 
         robot.leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -71,21 +71,25 @@ public class CraterSideAuto extends LinearOpMode{
 
         runtime.reset();
 
-        robot.phoneServo.setPosition(camera_position);
         unlatch(6.8);
         strafeLeft(.3,2.0);
-        moveBackward(.3, 1.7);
-        CheckAllign();
-        robot.phoneServo.setPosition(camera_down);
-        moveForward(0.3, 1.0);
+        //moveBackward(.3, 1.7);
 
+        // New code
+        moveBackward(1.0, 1.8);
+        strafeRight(1.0, 1.8);
+        turnLeft(0.75, 1.0);
+
+
+
+         //   CheckAllign();
+        //    robot.phoneServo.setPosition(1.0);
 
 
         robot.leftFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.leftBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.rightFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.rightBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
     }
 
     public void moveForward(double forwardSpeed, double time){
@@ -553,25 +557,23 @@ public class CraterSideAuto extends LinearOpMode{
         }
         robot.latchingMotor.setPower(0.0);
     }
-
-    public void markerUp(){
+    public void boneUp(){
         robot.boneDispenser.setPosition(boneDispenser_up_position);
     }
-    public void markerDown(){
+    public void boneDown(){
         robot.boneDispenser.setPosition(boneDispenser_down_position);
     }
 
     public void CheckAllign(){
-        detector.enable();
         StopRobot();
         sleep(1000);
-
+        detector.enable();
         while(opModeIsActive() && detector.getAligned() != true){
-            // This while loop will move the robot backwards until it find the gold mineral
-            robot.rightBackMotor.setPower(-.30);
-            robot.rightFrontMotor.setPower(-.30);
-            robot.leftBackMotor.setPower(-.30);
-            robot.leftFrontMotor.setPower(-.30);
+
+            robot.rightBackMotor.setPower(-.25);
+            robot.rightFrontMotor.setPower(-.25);
+            robot.leftBackMotor.setPower(-.25);
+            robot.leftFrontMotor.setPower(-.25);
         }
         telemetry.addData("Testing", "Found gold");
         telemetry.update();
@@ -594,19 +596,5 @@ public class CraterSideAuto extends LinearOpMode{
         robot.leftBackMotor.setPower(0.00);
         robot.rightFrontMotor.setPower(0.00);
         robot.leftFrontMotor.setPower(0.00);
-    }
-
-    public void senseDepotColorForward(){
-
-
-        while (robot.color.blue() < robot.color.red()*1.5){
-            robot.rightBackMotor.setPower(-.35);
-            robot.rightFrontMotor.setPower(-.35);
-            robot.leftBackMotor.setPower(-.35);
-            robot.leftFrontMotor.setPower(-.35);
-        }
-
-        StopRobot();
-
     }
 }

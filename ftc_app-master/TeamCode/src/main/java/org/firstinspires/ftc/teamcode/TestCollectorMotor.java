@@ -26,14 +26,11 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package org.firstinspires.ftc.teamcode;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 
 public class TestCollectorMotor
 {
@@ -45,12 +42,10 @@ public class TestCollectorMotor
     HardwareMap hwMap           =  null;
     private ElapsedTime period  = new ElapsedTime();
 
-
     /* Constructor */
     public TestCollectorMotor(){
 
     }
-
     /* Initialize standard Hardware interfaces */
     public void init(HardwareMap ahwMap) {
         // Save reference to Hardware map

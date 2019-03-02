@@ -26,9 +26,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package org.firstinspires.ftc.teamcode;
-
 import com.disnodeteam.dogecv.CameraViewDisplay;
 import com.disnodeteam.dogecv.DogeCV;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldDetector;
@@ -38,14 +36,11 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-
 @TeleOp(name="Sampling Order Example", group="DogeCV")
-@Disabled
+/*Disabled*/
 public class TestNewGold extends OpMode {
     // Detector object
     private SamplingOrderDetector detector;
-
-
     @Override
     public void init() {
         telemetry.addData("Status", "DogeCV 2018.0 - Sampling Order Example");
@@ -80,9 +75,7 @@ public class TestNewGold extends OpMode {
      */
     @Override
     public void start() {
-
     }
-
 
     /*
      * Code to run REPEATEDLY when the driver hits PLAY

@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.MasterXHardware;
 
 @Autonomous(name="Crater", group="PushBot")
-@Disabled
+/*@Disabled*/
 public class CraterAuto extends LinearOpMode{
     // Use this code when starting at crater
 
@@ -36,6 +36,7 @@ public class CraterAuto extends LinearOpMode{
     double latch_up_speed = 0.5;
     double latch_down_speed = 0.5;
     double camera_up = .7;
+    double camera_down = .05;
 
     long sleepTime = 1000;
 
@@ -59,11 +60,12 @@ public class CraterAuto extends LinearOpMode{
 
         detector.ratioScorer.weight = 5;
         detector.ratioScorer.perfectRatio = 1.0;
-        robot.phoneServo.setPosition(camera_up);// 1=vertical, 0=horizontal
 
 
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
+        robot.phoneServo.setPosition(camera_down);
+
         waitForStart();
 
         robot.leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -83,54 +85,6 @@ public class CraterAuto extends LinearOpMode{
         robot.leftBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.rightFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.rightBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-
-            /*
-            strafeLeft(SUPERSONICSPEED, 1.7);
-            turnLeft(SUPERSONICSPEED, 0.83);
-            strafeRight(SUPERSONICSPEED, 0.4);
-            moveBackward(SUPERSONICSPEED, 2.5);
-            */
-
-/*
-            encoderDriveLeft(SUPERSONICSPEED, SUPERSONICSPEED, 2, 1);
-            pauseRobot(1);
-            encoderDriveForward(1,4,2);
-            pauseRobot(1);
-            encoderDriveTurnLeft(1, 9, 3);
-            pauseRobot(1);
-            encoderDriveForward(1, 15, 7.5);
-            pauseRobot(1);
-
-            encoderDriveForward(1,20,3);
-            encoderDriveForward(SUPERSONICSPEED,5,5);
-            pauseRobot(1);
-
-            encoderDriveTurnLeft(SUPERSONICSPEED,6,6);
-            pauseRobot(1);
-            encoderDriveForward(SUPERSONICSPEED,9,9);
-            pauseRobot(1);
-
-            encoderDriveTurnRight(SUPERSONICSPEED,4,4);
-            pauseRobot(1);
-
-            boneDown();
-            pauseRobot(1);
-
-            encoderDriveTurnRight(SUPERSONICSPEED,500,5);
-            pauseRobot(1);
-
-            encoderDriveLeft(SUPERSONICSPEED,SUPERSONICSPEED,2,2);
-            pauseRobot(1);
-
-            encoderDriveForward(SUPERSONICSPEED,500,8);
-            pauseRobot(1);
-
-            sleep(sleepTime);
-            boneDown();
-            sleep(sleepTime);
-            runtime.reset();
-*/
     }
 
     public void moveForward(double forwardSpeed, double time){

@@ -26,7 +26,6 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -41,27 +40,20 @@ public class TestingTheMineralManipulator extends LinearOpMode {
     TestCollectorMotor robot = new TestCollectorMotor();
     boolean collectorStatus = false;
 
-
     private ElapsedTime runtime  = new ElapsedTime();
     @Override
     public void runOpMode() {
-
-
         robot.init(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Welcome to Rover Ruckus Mecanum.");
         telemetry.update();
-
-
         waitForStart();
-
 
         while (opModeIsActive())
         {
             if (gamepad1.a){
                 robot.mineralCollectorMoverMotor.setPower(0.1);
-
             }
             else if (gamepad1.b){
                 robot.mineralCollectorMoverMotor.setPower(-0.1);
@@ -80,11 +72,8 @@ public class TestingTheMineralManipulator extends LinearOpMode {
             if (gamepad1.y){
                 collectorStatus = !collectorStatus;
             }
-
             // Pause for 40 mS each cycle = update 25 times a second.
             sleep(40);
         }
     }
-
-
 }

@@ -9,9 +9,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="CraterAuto", group="PushBot")
-@Disabled
-public class CraterSideAuto extends LinearOpMode{
+@Autonomous(name="RedDepotNEW", group="PushBot")
+/*@Disabled*/
+public class RedNewCraterAuto extends LinearOpMode{
+    // Use this code when starting at depot
+    // This code is the original working depot code
 
     /* Public OpMode members. */
     MasterXHardware robot = new MasterXHardware();
@@ -29,7 +31,7 @@ public class CraterSideAuto extends LinearOpMode{
     double sample_speed = 0.3;
 
     double boneDispenser_up_position = .69;
-    double boneDispenser_down_position = 1;
+    double boneDispenser_down_position = .0002;
 
     double camera_position = 0.7;
     double camera_down = 0.05;
@@ -64,6 +66,8 @@ public class CraterSideAuto extends LinearOpMode{
 
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
+        robot.phoneServo.setPosition(camera_down);
+
         waitForStart();
 
         robot.leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -79,6 +83,18 @@ public class CraterSideAuto extends LinearOpMode{
         robot.phoneServo.setPosition(camera_down);
         moveForward(0.3, 1.0);
 
+        //New code added from Depot 2
+        turnLeft(0.3, 1.0);
+        strafeLeft(.7,1.25);
+        strafeRight(.5,.35);
+        moveBackward(.5,.45);
+        robot.color.enableLed(true);
+        moveForward(.45,.5);
+        markerDown();
+        pauseRobot(.5);
+        strafeRight(.5,.25);
+        moveBackward(.70,3.5);
+        markerUp();
 
 
         robot.leftFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -577,7 +593,8 @@ public class CraterSideAuto extends LinearOpMode{
         telemetry.update();
         StopRobot();
         sleep(1000);
-        turnRight(.3,2.2);
+        turnRight(.3,2.1
+        );
         moveForward(.3,2.0);
     }
 
@@ -599,7 +616,7 @@ public class CraterSideAuto extends LinearOpMode{
     public void senseDepotColorForward(){
 
 
-        while (robot.color.blue() < robot.color.red()*1.5){
+        while (robot.color.blue()*1.3 > robot.color.red()){
             robot.rightBackMotor.setPower(-.35);
             robot.rightFrontMotor.setPower(-.35);
             robot.leftBackMotor.setPower(-.35);

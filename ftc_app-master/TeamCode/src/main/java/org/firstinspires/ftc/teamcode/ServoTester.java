@@ -33,14 +33,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-
 public class ServoTester
 {
     /* Public OpMode members. */
 
     //servos
     public Servo Servo1 = null;
-
 
     /* Local OpMode members. */
     HardwareMap hwMap  = null;
@@ -58,13 +56,6 @@ public class ServoTester
         // Define and Initialize Motors
 
         Servo1 = hwMap.get(Servo.class, "s");
-
-
-
-
-
-
-
 
 
     }

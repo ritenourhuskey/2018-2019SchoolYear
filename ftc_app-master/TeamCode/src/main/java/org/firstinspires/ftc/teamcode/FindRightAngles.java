@@ -27,44 +27,65 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package org.firstinspires.ftc.teamcode;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name="ServoTesterTeleOp", group="Test")
-@Disabled
-public class ServoTesterTeleOp extends LinearOpMode {
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+
+@TeleOp(name="Angles", group="MASTERX")
+//@Disabled
+public class FindRightAngles extends LinearOpMode {
 
     /* Declare OpMode members. */
     MasterXHardware robot = new MasterXHardware();
-
+    private ElapsedTime runtime  = new ElapsedTime();
+    BNO055IMU imu;
+    // State used for updating telemetry
+    Orientation angles = new Orientation();
     @Override
-    public void runOpMode() {
-        // These two values are the motor values for both the back and front motors using the joystick
+    public void runOpMode() throws InterruptedException {
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+
+        parameters.mode                = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled      = false;
+
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+
+        double gamepad1LeftY;
+        double gamepad1LeftX;
+        double gamepad1RightX;
+
+        double LATCH_UP = -1.0;
+        double LATCH_DOWN = 1.0;
+        double LATCH_STAY = 1.0;
+        double LATCH_STOP = 0.0;
+
+        boolean LATCHHELP = false;
+        boolean COLLECTOR_STATUS = false;
+
+        double SPEED_MODIFIER = 1.00;
+        double SPEED_MODIFIER_INTERVAL = 0.25;
+        double camera_position = 0.7;
+        double camera_down = 0.05;
+
+        String LatchStatus = "Off";
+
         robot.init(hardwareMap);
-
+        robot.phoneServo.setPosition(camera_down);
         // Send telemetry message to signify robot waiting;
-        telemetry.addData("Say", "I'm Lovin' it!");    //
+        telemetry.addData("Say", "Welcome to Rover Ruckus Mecanum.");
         telemetry.update();
-
-        // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        // run until driver presses STOP
-        while (opModeIsActive()) {
-            if (gamepad1.dpad_up){
-                robot.boneDispenser.setPosition(1);
-            }
-            else if (gamepad1.dpad_down){
-                robot.boneDispenser.setPosition(0);
-            }
-            else {
-                robot.boneDispenser.setPosition(.5);
-            }
-
-            telemetry.addData("say",robot.boneDispenser.getPosition());
-            telemetry.update();
-
+        while (opModeIsActive())
+        {
+            robot.moveMineralCollector1.setPower(gamepad1.left_stick_y);
+            robot.moveMineralCollector2.setPower(gamepad1.right_stick_y);
             // Pause for 40 mS each cycle = update 25 times a second.
             sleep(40);
         }

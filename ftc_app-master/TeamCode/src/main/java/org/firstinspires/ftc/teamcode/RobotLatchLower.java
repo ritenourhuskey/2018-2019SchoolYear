@@ -37,14 +37,12 @@ public class  RobotLatchLower extends LinearOpMode{
 
     long sleepTime = 1000;
 
-
     @Override
     public void runOpMode(){
         robot.init(hardwareMap);
         // robot.boneDispenser.setPosition(boneDispenser_up_position);
 
         robot.phoneServo.setPosition(camera_position);// 1=vertical, 0=horizontal
-
 
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
@@ -59,6 +57,4 @@ public class  RobotLatchLower extends LinearOpMode{
             robot.latchingMotor.setPower(Power);
         }
     }
-
-
 }

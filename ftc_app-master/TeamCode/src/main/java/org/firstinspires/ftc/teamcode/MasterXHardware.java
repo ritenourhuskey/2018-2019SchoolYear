@@ -29,12 +29,17 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 /*
 Hardware Configuration on Phones
 
@@ -57,6 +62,7 @@ Servo Port 5: collector
 Servo Port 4: dumper
 Servo port 3: bone
 Servo Port 2: soul
+Servo Port 0: craterclaim
 
 
 
@@ -76,8 +82,7 @@ public class MasterXHardware
     public DcMotor  moveMineralCollector1   = null;
     public DcMotor  moveMineralCollector2   = null;
     public DcMotor  extendMineralCollector  = null;
-
-
+    public Servo    craterclaim              = null;
     public Servo boneDispenser = null;
 
     public ColorSensor color = null;
@@ -85,7 +90,6 @@ public class MasterXHardware
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
     private ElapsedTime period  = new ElapsedTime();
-
 
     /* Constructor */
     public MasterXHardware(){
@@ -95,6 +99,7 @@ public class MasterXHardware
     /* Initialize standard Hardware interfaces */
     public void init(HardwareMap ahwMap) {
         // Save reference to Hardware map
+
         hwMap = ahwMap;
 
         // Define and Initialize Motors
@@ -109,6 +114,7 @@ public class MasterXHardware
         moveMineralCollector2 = hwMap.get(DcMotor.class, "mover2");
         extendMineralCollector = hwMap.get(DcMotor.class, "extendor");
         phoneServo = hwMap.get(Servo.class, "soul");
+        craterclaim = hwMap.get(Servo.class, "craterclaim");
 
         boneDispenser = hwMap.get(Servo.class, "bone");
 
@@ -118,8 +124,6 @@ public class MasterXHardware
 //        rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
 //        rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
         latchingMotor.setDirection(DcMotor.Direction.REVERSE);
-
-
 
 
         // Set all motors to zero power
@@ -140,7 +144,6 @@ public class MasterXHardware
         latchingMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         phoneServo.setPosition(.5);
-
+        craterclaim.setPosition(0.002);
     }
  }
-

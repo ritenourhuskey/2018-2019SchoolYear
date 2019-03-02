@@ -113,8 +113,7 @@ public class AutonomousTeleOpTesting extends LinearOpMode {
         }
     }
 
-    public void encoderDriveBackward(double speed,
-                                    double inches) {
+    public void encoderDriveBackward(double speed, double inches) {
         int newLeftFrontTarget;
         int newRightFrontTarget;
         int newLeftBackTarget;
@@ -179,8 +178,7 @@ public class AutonomousTeleOpTesting extends LinearOpMode {
         }
     }
     //method that drives the robot backwards
-    public void encoderDriveForward(double speed,
-                                     double inches) {
+    public void encoderDriveForward(double speed, double inches) {
         int newLeftFrontTarget;
         int newRightFrontTarget;
         int newLeftBackTarget;
@@ -245,8 +243,7 @@ public class AutonomousTeleOpTesting extends LinearOpMode {
         }
     }
     //method that drives the robot the left
-    public void encoderDriveRight(double speedFront, double speedBack,
-                                 double inches) {
+    public void encoderDriveRight(double speedFront, double speedBack, double inches) {
         int newLeftFrontTarget;
         int newRightFrontTarget;
         int newLeftBackTarget;
@@ -311,8 +308,7 @@ public class AutonomousTeleOpTesting extends LinearOpMode {
         }
     }
     //method that drives the robot to the right
-    public void encoderDriveLeft(double speedFront, double speedBack,
-                                  double inches) {
+    public void encoderDriveLeft(double speedFront, double speedBack, double inches) {
         int newLeftFrontTarget;
         int newRightFrontTarget;
         int newLeftBackTarget;
@@ -377,8 +373,7 @@ public class AutonomousTeleOpTesting extends LinearOpMode {
         }
     }
     //method that turns the robot to the right
-    public void encoderDriveTurnLeft(double speed,
-                                      double inches) {
+    public void encoderDriveTurnLeft(double speed, double inches) {
         int newLeftFrontTarget;
         int newRightFrontTarget;
         int newLeftBackTarget;
@@ -443,8 +438,7 @@ public class AutonomousTeleOpTesting extends LinearOpMode {
         }
     }
     //method that turns the robot to the right
-    public void encoderDriveTurnRight(double speed,
-                                     double inches) {
+    public void encoderDriveTurnRight(double speed, double inches) {
         int newLeftFrontTarget;
         int newRightFrontTarget;
         int newLeftBackTarget;
@@ -518,7 +512,6 @@ public class AutonomousTeleOpTesting extends LinearOpMode {
         }
         robot.latchingMotor.setPower(0.0);
     }
-
     public void latchup (double timeoutS){
         runtime.reset();
 

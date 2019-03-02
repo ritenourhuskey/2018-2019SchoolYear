@@ -10,9 +10,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="RedDepot", group="PushBot")
-@Disabled
+/*@Disabled*/
 public class RedDepotAuto extends LinearOpMode{
-    // Use this code when starting at depot
     // This code is the original working depot code
 
     /* Public OpMode members. */
@@ -31,7 +30,9 @@ public class RedDepotAuto extends LinearOpMode{
     double sample_speed = 0.3;
 
     double boneDispenser_up_position = .69;
-    double boneDispenser_down_position = 1;
+    double boneDispenser_down_position = .0002;
+    double crater_position_In = 0.002; // In robot
+    double crater_position_Out = 1.0; // Out of robot
 
     double camera_position = 0.7;
     double camera_down = 0.05;
@@ -45,7 +46,6 @@ public class RedDepotAuto extends LinearOpMode{
     @Override
     public void runOpMode(){
         robot.init(hardwareMap);
-       // robot.boneDispenser.setPosition(boneDispenser_up_position);
         detector = new GoldAlignDetector();
         detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance(), -1, false);
         detector.useDefaults();
@@ -66,6 +66,9 @@ public class RedDepotAuto extends LinearOpMode{
 
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
+        robot.phoneServo.setPosition(camera_down);
+        robot.craterclaim.setPosition(crater_position_In);
+
         waitForStart();
 
         robot.leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -93,43 +96,16 @@ public class RedDepotAuto extends LinearOpMode{
             strafeRight(.5,.25);
             moveBackward(.70,3.5);
             markerUp();
+            //craterOut();
+            moveBackward(0.70, 3.0);
+
 
 
         robot.leftFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.leftBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.rightFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.rightBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-/*
-            encoderDriveLeft(SUPERSONICSPEED, SUPERSONICSPEED, 2, 1);
-            pauseRobot(1);
-            encoderDriveForward(1,4,2);
-            pauseRobot(1);
-            encoderDriveTurnLeft(1, 9, 3);
-            pauseRobot(1);
-            encoderDriveForward(1, 15, 7.5);
-            pauseRobot(1);
-            encoderDriveForward(1,20,3);
-            encoderDriveForward(SUPERSONICSPEED,5,5);
-            pauseRobot(1);
-            encoderDriveTurnLeft(SUPERSONICSPEED,6,6);
-            pauseRobot(1);
-            encoderDriveForward(SUPERSONICSPEED,9,9);
-            pauseRobot(1);
-            encoderDriveTurnRight(SUPERSONICSPEED,4,4);
-            pauseRobot(1);
-            boneDown();
-            pauseRobot(1);
-            encoderDriveTurnRight(SUPERSONICSPEED,500,5);
-            pauseRobot(1);
-            encoderDriveLeft(SUPERSONICSPEED,SUPERSONICSPEED,2,2);
-            pauseRobot(1);
-            encoderDriveForward(SUPERSONICSPEED,500,8);
-            pauseRobot(1);
-            sleep(sleepTime);
-            boneDown();
-            sleep(sleepTime);
-            runtime.reset();
-*/
+
     }
 
     public void moveForward(double forwardSpeed, double time){
@@ -604,6 +580,8 @@ public class RedDepotAuto extends LinearOpMode{
     public void markerDown(){
         robot.boneDispenser.setPosition(boneDispenser_down_position);
     }
+    public void craterOut(){robot.craterclaim.setPosition(crater_position_Out);}
+    public void craterIn(){robot.craterclaim.setPosition(crater_position_In);}
 
     public void CheckAllign(){
         detector.enable();
@@ -643,7 +621,7 @@ public class RedDepotAuto extends LinearOpMode{
     public void senseDepotColorForward(){
 
 
-       while (robot.color.blue()*1.5 > robot.color.red()){
+       while (robot.color.blue()*1.3 > robot.color.red()){
            robot.rightBackMotor.setPower(-.35);
            robot.rightFrontMotor.setPower(-.35);
            robot.leftBackMotor.setPower(-.35);

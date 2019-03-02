@@ -2,21 +2,35 @@ package org.firstinspires.ftc.teamcode;
 
 import com.disnodeteam.dogecv.CameraViewDisplay;
 import com.disnodeteam.dogecv.DogeCV;
-import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
+import com.disnodeteam.dogecv.detectors.roverrukus.SamplingOrderDetector;
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="CraterAuto", group="PushBot")
-@Disabled
-public class CraterSideAuto extends LinearOpMode{
+import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
+
+import java.util.Locale;
+
+@Autonomous(name="GyroTestingImu", group="PushBot")
+
+public class GyroSensorAutoTesting extends LinearOpMode{
+    // Use this code when starting at depot
+    // This a depot code that you can revise
 
     /* Public OpMode members. */
     MasterXHardware robot = new MasterXHardware();
     private ElapsedTime runtime  = new ElapsedTime();
-    GoldAlignDetector detector = new GoldAlignDetector();
+    SamplingOrderDetector detector = new SamplingOrderDetector();
 
     static final double     COUNTS_PER_MOTOR_REV    = 1120 ;    // eg: AndyMark NeveRest Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
@@ -28,11 +42,8 @@ public class CraterSideAuto extends LinearOpMode{
     static final double     SUPERSONICSPEED      = 1.0;
     double sample_speed = 0.3;
 
-    double boneDispenser_up_position = .69;
-    double boneDispenser_down_position = 1;
-
-    double camera_position = 0.7;
-    double camera_down = 0.05;
+    double boneDispenser_up_position = 1.0; // 1=near phone case
+    double boneDispenser_down_position = 0.0; // 0 = drop outside
 
     double latch_up_speed = 0.5;
     double latch_down_speed = 0.5;
@@ -40,17 +51,47 @@ public class CraterSideAuto extends LinearOpMode{
     long sleepTime = 1000;
 
 
+    BNO055IMU imu;
+    // State used for updating telemetry
+    Orientation angles = new Orientation();
+
+
+
+
     @Override
-    public void runOpMode(){
+    public void runOpMode()throws InterruptedException{
+
         robot.init(hardwareMap);
-        // robot.boneDispenser.setPosition(boneDispenser_up_position);
-        detector = new GoldAlignDetector();
+        robot.boneDispenser.setPosition(boneDispenser_up_position);
+        detector = new SamplingOrderDetector();
         detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance(), -1, false);
         detector.useDefaults();
 
+
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+
+        parameters.mode                = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled      = false;
+
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+
+        while (!isStopRequested() && !imu.isGyroCalibrated())
+        {
+            sleep(50);
+            idle();
+        }
+
+        telemetry.addData("Mode", "waiting for start");
+        telemetry.addData("imu calib status", imu.getCalibrationStatus().toString());
+        telemetry.update();
+
         // Optional Tuning
-        detector.alignSize = 100; // How wide (in pixels) is the range in which the gold object will be aligned.(Represented by green bars in the preview)
-        detector.alignPosOffset = 0; // How far from center frame to offset this alignment zone.
+       // detector.alignSize = 100; // How wide (in pixels) is the range in which the gold object will be aligned.(Represented by green bars in the preview)
+       // detector.alignPosOffset = 0; // How far from center frame to offset this alignment zone.
+        // ^ are commented because they threw up an error when I imported SamplingOrderDetector
         detector.downscale = 0.4; // How much to downscale the input frames
 
         detector.areaScoringMethod = DogeCV.AreaScoringMethod.MAX_AREA; // Can also be PERFECT_AREA
@@ -59,7 +100,7 @@ public class CraterSideAuto extends LinearOpMode{
 
         detector.ratioScorer.weight = 5;
         detector.ratioScorer.perfectRatio = 1.0;
-        //  robot.phoneServo.setPosition(camera_position);// 1=vertical, 0=horizontal
+        robot.phoneServo.setPosition(.47);// 1=vertical, 0=horizontal
 
 
         telemetry.addData("Status", "Ready to run");
@@ -71,20 +112,11 @@ public class CraterSideAuto extends LinearOpMode{
 
         runtime.reset();
 
-        robot.phoneServo.setPosition(camera_position);
-        unlatch(6.8);
-        strafeLeft(.3,2.0);
-        moveBackward(.3, 1.7);
-        CheckAllign();
-        robot.phoneServo.setPosition(camera_down);
-        moveForward(0.3, 1.0);
+        moveForward(.5,1);
+
+        TurnLeftAccurately(90);
 
 
-
-        robot.leftFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.leftBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.rightFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.rightBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
     }
 
@@ -107,7 +139,7 @@ public class CraterSideAuto extends LinearOpMode{
             robot.rightBackMotor.setPower(turnSpeed);
         }
     }
-    public void turnRight (double turnSpeed, double time) {
+    public void turnRight(double turnSpeed, double time) {
         runtime.reset();
         while(opModeIsActive() && runtime.seconds() < time) {
             robot.leftFrontMotor.setPower(turnSpeed);
@@ -564,19 +596,21 @@ public class CraterSideAuto extends LinearOpMode{
     public void CheckAllign(){
         detector.enable();
         StopRobot();
-        sleep(1000);
+        sleep(2000);
 
-        while(opModeIsActive() && detector.getAligned() != true){
-            // This while loop will move the robot backwards until it find the gold mineral
-            robot.rightBackMotor.setPower(-.30);
-            robot.rightFrontMotor.setPower(-.30);
-            robot.leftBackMotor.setPower(-.30);
-            robot.leftFrontMotor.setPower(-.30);
+     /*  while(opModeIsActive() && detector.getAligned() != true){
+        // This while loop will move the robot backwards until it find the gold mineral
+            robot.rightBackMotor.setPower(-.15);
+            robot.rightFrontMotor.setPower(-.15);
+            robot.leftBackMotor.setPower(-.15);
+            robot.leftFrontMotor.setPower(-.15);
         }
+*/ //This is commented because it threw up an error when I imported SamplingOrderDetector
         telemetry.addData("Testing", "Found gold");
         telemetry.update();
         StopRobot();
         sleep(1000);
+    //    strafeLeft(0.3, 2.2);
         turnRight(.3,2.2);
         moveForward(.3,2.0);
     }
@@ -596,17 +630,31 @@ public class CraterSideAuto extends LinearOpMode{
         robot.leftFrontMotor.setPower(0.00);
     }
 
-    public void senseDepotColorForward(){
+    public void TurnLeftAccurately(double rightThing){
 
+        while (angles.firstAngle < rightThing ){
 
-        while (robot.color.blue() < robot.color.red()*1.5){
-            robot.rightBackMotor.setPower(-.35);
-            robot.rightFrontMotor.setPower(-.35);
-            robot.leftBackMotor.setPower(-.35);
-            robot.leftFrontMotor.setPower(-.35);
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+            robot.leftFrontMotor.setPower(1.0);
+            robot.rightFrontMotor.setPower(-1.0);
+            robot.leftBackMotor.setPower(1.0);
+            robot.rightBackMotor.setPower(-1.0);
+            telemetry.addData("Angle: ", angles.firstAngle);
+            telemetry.update();
         }
+        while (angles.firstAngle > rightThing){
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
+            robot.leftFrontMotor.setPower(-1.0);
+            robot.rightFrontMotor.setPower(1.0);
+            robot.leftBackMotor.setPower(-1.0);
+            robot.rightBackMotor.setPower(1.0);
+        }
         StopRobot();
-
     }
+
+
+
+
 }

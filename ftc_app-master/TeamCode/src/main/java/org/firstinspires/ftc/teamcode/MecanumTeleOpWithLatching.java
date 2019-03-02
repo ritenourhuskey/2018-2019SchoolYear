@@ -72,6 +72,7 @@ public class MecanumTeleOpWithLatching extends LinearOpMode {
         while (opModeIsActive())
         {
             robot.color.enableLed(false);
+
             gamepad1LeftY = gamepad1.left_stick_y;
             gamepad1LeftX = gamepad1.left_stick_x;
             gamepad1RightX = -gamepad1.right_stick_x;
@@ -105,8 +106,6 @@ public class MecanumTeleOpWithLatching extends LinearOpMode {
             }
 
 
-
-
             if (gamepad1.dpad_up){
                 robot.latchingMotor.setPower(LATCH_UP);
             }
@@ -118,11 +117,11 @@ public class MecanumTeleOpWithLatching extends LinearOpMode {
             }
 
 
-
-
-
             if (gamepad2.x){
-                robot.mineralCollectorServo.setPosition(0.85);
+                robot.mineralCollectorServo.setPosition(1);
+            }
+            else if(gamepad2.b){
+                robot.mineralCollectorServo.setPosition(0);
             }
             else{
                 robot.mineralCollectorServo.setPosition(.5);
@@ -136,19 +135,15 @@ public class MecanumTeleOpWithLatching extends LinearOpMode {
                 robot.moveMineralBox.setPosition(.9);
             }
 
-            if (gamepad2.dpad_up){
-                robot.extendMineralCollector.setPower(-1.00);
-            }
-            else if (gamepad2.dpad_down){
-                robot.extendMineralCollector.setPower(1.00);
-            }
-            else{
-                robot.extendMineralCollector.setPower(0.00);
-            }
-
 
             if(gamepad2.right_bumper){
-                robot.phoneServo.setPosition(.5);
+                robot.extendMineralCollector.setPower(0.5);
+            }
+            else if(gamepad2.left_bumper) {
+                robot.extendMineralCollector.setPower(-0.5);
+            }
+            else{
+                robot.extendMineralCollector.setPower(0);
             }
 
             if (gamepad1.left_bumper){
@@ -162,10 +157,8 @@ public class MecanumTeleOpWithLatching extends LinearOpMode {
                 }
             }
 
-            robot.moveMineralCollector1.setPower(-gamepad2.right_stick_y);
-            robot.moveMineralCollector2.setPower(gamepad2.right_stick_y);
-
-
+            robot.moveMineralCollector1.setPower(gamepad2.left_stick_y);
+            robot.moveMineralCollector2.setPower(gamepad2.left_stick_y);
 
             // Pause for 40 mS each cycle = update 25 times a second.
             sleep(40);

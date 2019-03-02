@@ -9,9 +9,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="CraterAuto", group="PushBot")
-@Disabled
-public class CraterSideAuto extends LinearOpMode{
+@Autonomous(name="RedAuto", group="PushBot")
+//@Disabled
+public class RedAuto extends LinearOpMode{
 
     /* Public OpMode members. */
     MasterXHardware robot = new MasterXHardware();
@@ -32,7 +32,6 @@ public class CraterSideAuto extends LinearOpMode{
     double boneDispenser_down_position = 1;
 
     double camera_position = 0.7;
-    double camera_down = 0.05;
 
     double latch_up_speed = 0.5;
     double latch_down_speed = 0.5;
@@ -71,13 +70,15 @@ public class CraterSideAuto extends LinearOpMode{
 
         runtime.reset();
 
-        robot.phoneServo.setPosition(camera_position);
+        robot.phoneServo.setPosition(0.02);
         unlatch(6.8);
         strafeLeft(.3,2.0);
-        moveBackward(.3, 1.7);
-        CheckAllign();
-        robot.phoneServo.setPosition(camera_down);
-        moveForward(0.3, 1.0);
+        moveBackward(.7, 2.5);
+        moveForward(.25,.25);
+        strafeRight(.5,1.5);
+        turnLeft(.5,1.25);
+
+
 
 
 
@@ -577,8 +578,8 @@ public class CraterSideAuto extends LinearOpMode{
         telemetry.update();
         StopRobot();
         sleep(1000);
-        turnRight(.3,2.2);
-        moveForward(.3,2.0);
+        strafeLeft(.5,.5);
+        strafeRight(.5,.7);
     }
 
     public void pauseRobot(double timeoutS){
